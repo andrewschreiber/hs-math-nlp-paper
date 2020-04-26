@@ -10,76 +10,48 @@ title: "ReScience (R)evolution"
 # List of authors with name, orcid number, email and affiliation
 # Affiliation "*" means contact author
 authors:
-  - name: Konrad Hinsen
-    orcid: 0000-0003-0330-9428
-    email: konrad.hinsen@cnrs.fr
-    affiliations: 1,2
+  - name: Andrew Schreiber
+    orcid: 0000-0002-2475-0960
+    email: andrew.schreiber1@gmail.com
+    affiliations: 1, *
     
-  - name: Nicolas P. Rougier
-    orcid: 0000-0002-6972-589X
-    email: Nicolas.Rougier@inria.fr
-    affiliations: 3,4,5,*      # * is for contact author
+  - name: Taylor Kulp-Mcdowall
+    orcid: -
+    email: taylorkmc@gmail.com
+    affiliations: 1
 
 # List of affiliations with code (corresponding to author affiliations), name
 # and address. You can also use these affiliations to add text such as "Equal
 # contributions" as name (with no address).
 affiliations:
   - code:    1
-    name:    Centre de Biophysique Moléculaire, CNRS UPR4301
-    address: Orléans, France
-    
-  - code:    2
-    name:    Synchrotron SOLEIL, Division Expériences
-    address: Gif sur Yvette, France
-    
-  - code:    3
-    name:    INRIA Bordeaux Sud-Ouest
-    address: Bordeaux, France
-    
-  - code:    4
-    name:    LaBRI, Université de Bordeaux, Institut Polytechnique de Bordeaux,
-             Centre National de la Recherche Scientifique, UMR 5800
-    address: Talence, France
-    
-  - code:    5
-    name:    Institut des Maladies Neurodégénératives, Université  de Bordeaux,
-             Centre National de la Recherche Scientifique, UMR 5293
-    address: Bordeaux, France
-
+    name:    Independent
+    address: San Francisco, CA
 
 # List of keywords (adding the programming language might be a good idea)
-keywords: rescience c, rescience x
+keywords: nlp, deep learning, rescience c, rescience x
 
 # Code URL and DOI (url is mandatory for replication, doi after acceptance)
 # You can get a DOI for your code from Zenodo,
 #   see https://guides.github.com/activities/citable-code/
 code:
-  - url: https://github.com/rescience-c/template
+  - url: https://github.com/andrewschreiber/hs-math-nlp
   - doi: 
 
 # Date URL and DOI (optional if no data)
 data:
-  - url:
+  - url: https://storage.googleapis.com/mathematics-dataset/mathematics_dataset-v1.0.tar.gz
   - doi:
 
 # Information about the original article that has been replicated
 replication:
- - cite: # Full textual citation
+ - cite: 	 # Full textual citation
  - bib:  # Bibtex key (if any) in your bibliography file
- - url:  # URL to the PDF, try to link to a non-paywall version
- - doi:  # Regular digital object identifier
+ - url: https://arxiv.org/pdf/1904.01557.pdf  # URL to the PDF, try to link to a non-paywall version
+ - doi: arXiv:1904.01557 # Regular digital object identifier
 
 # Don't forget to surround abstract with double quotes
-abstract: "Three years have passed since ReScience published its first article
-           and since September 2015, things have been going steadily. We're
-           still alive, independent and without a budget. In the meantime, we
-           have published around 20 articles (mostly in computational
-           neuroscience & computational ecology) and the initial has grown
-           from around 10 to roughly 100 members (editors and reviewers), we
-           have advertised ReScience at several conferences worldwide, gave
-           some interviews and we published an article introducing ReScience in
-           PeerJ. Based on our experience at managing the journal during these
-           three years, we think the time is ripe for proposing some changes."
+abstract: "Here is the abstract for the reproduction of Analysing Mathematical Reasoning Abilities of Neural Models. It will summarize our work and findings. Todo."
 
 # Bibliography file (yours)
 bibliography: bibliography.bib
@@ -89,14 +61,14 @@ bibliography: bibliography.bib
 #  * Editorial
 #  * Letter
 #  * Replication
-type: Editorial
+type: Replication
 
 # Scientific domain of the article (e.g. Computational Neuroscience)
 #  (one domain only & try to be not overly specific)
-domain: 
+domain: Machine Learning
 
 # Coding language (main one only if several)
-language:
+language: Python
 
   
 # To be filled by the author(s) after acceptance
