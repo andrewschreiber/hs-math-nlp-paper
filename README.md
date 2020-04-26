@@ -1,3 +1,7 @@
+# Analysing Mathematical Reasoning Abilities of Neural Models reproduction
+
+Codebase for the paper that will ultimately be submitted to ReScience.
+
 ### [ReScience C](https://rescience.github.io/) article template
 
 This repository contains the Latex (optional) template for writing a ReScience
@@ -16,15 +20,13 @@ For a submission, fill in information in
 and type:
 
 ```bash
-$ make 
+$ make
 ```
 
 This will produce an `article.pdf` using xelatex and provided font.
-
 
 After acceptance, you'll need to complete [metadata.yaml](./metadata.yaml) with information provided by the editor and type again:
 
 ```bash
 $ make
 ```
-
