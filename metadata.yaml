@@ -5,7 +5,7 @@
 #  - For a successful replication, it shoudl be prefixed with "[Re]"
 #  - For a failed replication, it should be prefixed with "[¬Re]"
 #  - For other article types, no instruction (but please, not too long)
-title: "ReScience (R)evolution"
+title: "[Re] Analysing Mathematical Reasoning Abilities of Neural Models"
 
 # List of authors with name, orcid number, email and affiliation
 # Affiliation "*" means contact author
@@ -14,9 +14,9 @@ authors:
     orcid: 0000-0002-2475-0960
     email: andrew.schreiber1@gmail.com
     affiliations: 1, *
-    
+
   - name: Taylor Kulp-Mcdowall
-    orcid: -
+    orcid: 0000-0001-8381-2167
     email: taylorkmc@gmail.com
     affiliations: 1
 
@@ -24,19 +24,19 @@ authors:
 # and address. You can also use these affiliations to add text such as "Equal
 # contributions" as name (with no address).
 affiliations:
-  - code:    1
-    name:    Independent
+  - code: 1
+    name: Independent
     address: San Francisco, CA
 
 # List of keywords (adding the programming language might be a good idea)
-keywords: nlp, deep learning, rescience c, rescience x
+keywords: nlp, deep learning, rescience c, python
 
 # Code URL and DOI (url is mandatory for replication, doi after acceptance)
 # You can get a DOI for your code from Zenodo,
 #   see https://guides.github.com/activities/citable-code/
 code:
   - url: https://github.com/andrewschreiber/hs-math-nlp
-  - doi: 
+  - doi:
 
 # Date URL and DOI (optional if no data)
 data:
@@ -45,17 +45,17 @@ data:
 
 # Information about the original article that has been replicated
 replication:
- - cite: 	 # Full textual citation
- - bib:  # Bibtex key (if any) in your bibliography file
- - url: https://arxiv.org/pdf/1904.01557.pdf  # URL to the PDF, try to link to a non-paywall version
- - doi: arXiv:1904.01557 # Regular digital object identifier
+  - cite: # Full textual citation
+  - bib: # Bibtex key (if any) in your bibliography file
+  - url: https://arxiv.org/pdf/1904.01557.pdf # URL to the PDF, try to link to a non-paywall version
+  - doi: arXiv:1904.01557 # Regular digital object identifier
 
 # Don't forget to surround abstract with double quotes
 abstract: "Here is the abstract for the reproduction of Analysing Mathematical Reasoning Abilities of Neural Models. It will summarize our work and findings. Todo."
 
 # Bibliography file (yours)
 bibliography: bibliography.bib
-  
+
 # Type of the article
 # Type can be:
 #  * Editorial
@@ -70,17 +70,16 @@ domain: Machine Learning
 # Coding language (main one only if several)
 language: Python
 
-  
 # To be filled by the author(s) after acceptance
 # -----------------------------------------------------------------------------
 
 # For example, the URL of the GitHub issue where review actually occured
-review: 
-  - url: 
+review:
+  - url:
 
 contributors:
   - name:
-    orcid: 
+    orcid:
     role: editor
   - name:
     orcid:
@@ -91,19 +90,19 @@ contributors:
 
 # This information will be provided by the editor
 dates:
-  - received:  November 1, 2018
+  - received:
   - accepted:
-  - published: 
+  - published:
 
 # This information will be provided by the editor
 article:
   - number: # Article number will be automatically assigned during publication
-  - doi:    # DOI from Zenodo
-  - url:    # Final PDF URL (Zenodo or rescience website?)
+  - doi: # DOI from Zenodo
+  - url: # Final PDF URL (Zenodo or rescience website?)
 
 # This information will be provided by the editor
 journal:
-  - name:   "ReScience C"
-  - issn:   2430-3658
-  - volume: 4
-  - issue:  1
+  - name:
+  - issn:
+  - volume:
+  - issue:
