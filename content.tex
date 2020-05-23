@@ -9,9 +9,7 @@
 
 
 
-
-
-\subsubsection{Introduction}
+\section{Introduction}
 
 % Motivate importance of field
 %           Deep learning has revolutionized a lot of fields (specifically seq to seq) 
@@ -42,7 +40,7 @@ For their second contribution, they train a modern transformer network and a var
 In this work, we reproduce the paper of Saxton et al.\supercite{DBLP:journals/corr/abs-1904-01557}. We detail our methodology and challenges (Section 0.0 ), test model performance on the released interpolation and extrapolation mathematics datasets (Section 0.0), compare the published results to our findings (Section 0.0),  and release an ablation study (Section 0.0).  Our source code and model files are available on GitHub [1].
 
 
-\subsubsection{Related Work}
+\section{Related Work}
 
 % Related Work from Saxton Paper (2 paragraphs)
 There have been a couple studies prior to Saxton et al. \supercite{DBLP:journals/corr/abs-1904-01557} exploring mathematical reasoning and discrete reasoning in general. For example, work has been done to solve addition and multiplication tasks using variations of convolutions neural networks that achieve good generalization properties \supercite{kaiser2015neural}. Other research has pursued "neural equivalence networks" for learning tasks related to symbolic algebra and boolean expressions \supercite{allamanis2017learning}. Finally there has also been progress by Evan et al. using tree-structured neural networks to understand logical entailment \supercite{evans2018neural}.   \\
@@ -57,30 +55,99 @@ In contrast to these studies, Saxton et al. \supercite{DBLP:journals/corr/abs-19
 More related work has emerged after the publication of Saxton et al.\supercite{DBLP:journals/corr/abs-1904-01557} that is related in spirit. For example, Lample \& Charton \supercite{lample2019deep} use deep learning to solve more elaborate mathematical tasks such as symbolic integration and differential equations with surprising success.  Additionally, Wallace et al. \supercite{wallace2019nlp} investigated how well language models embed numbers finding that many common language embeddings excel on a variety of numeracy tasks. This supports the idea that language embedding currently capture numeracy to a high degree. \\
 
 
-\textbf{Implementation Details} \\
+\section{Experimental Methodology} \\
+In order to validate the authors’ results, we attempted to replicate the settings for testing the Transformer, simple LSTM, an attentional LSTM models on the interpolate and extrapolate mathematics datasets. We omitted the relational memory core and non-bidirectional LSTM encoder models because their results seemed inline with the other models and they were not included in the original paper’s figures 4 and 5. The authors did not publish the training code, but the model architecture was well-described. The original authors  were responsive to our questions over email for further details. In this section, we describe our implementation and clarify our decisions. 
 
-We replicated the Transformer and Attentional LSTM architectures described in the paper using PyTorch[]. Our implementations were based off popular open-sourced implementations. Although the original paper does not reference a neural network framework, the authors responded to us that they used the Tensor2Tensor for their Transformer and a custom Sonnet implementation for the LSTM. \\
+\subsection{Implementation Details} \\
 
-The 112 million datapoint, 7.8GB dataset was downloaded from the public site provided by by the authors[]. We trained the models according to the parameters set in the paper. The 5th epoch was stopped midway in order to hit exactly 500k batches. \\
+We replicated the models using PyTorch[]. Our implementations were based off popular open-sourced implementations [cite both (https://github.com/graykode/nlp-tutorial lstm)]. Although the original paper does not reference a neural network framework, the authors responded to us that they used the Tensor2Tensor for their Transformer and a custom Sonnet implementation for the LSTMs.\\
 
-For the Transformer, we used a batch size of 1024. Adam optimizer was setup with a learning rate of 6e-6, betas 0.9 - 0.995, and eps of 1e-9. The Transformer was configured with an embedding size of dmodel = 512, with h = 8 attentional heads. Key and value sizes were dk = dv = dmodel/h = 64. Each model layer has an intermediate representation with dimension dff = 2048. \\
+We trained the models according to the hyperparameters set in the paper: a batch size of 1024, Adam optimizer with learning rate of 6e-4, betas 0.9 - 0.995, and eps of 1e-9 [USE LATEX NOTATION], no dropout, and absolute gradient clipping of 0.1. The authors write that the hyperparameters were found via sweep. The questions were fed to the models as sequences of characters and training was stopped at 500k batches.\\
 
-[LSTM DETAILS HERE] \\
+The Transformer was configured with an embedding size of dmodel = 512, with h = 8 attentional heads. Key and value sizes were dk = dv = dmodel/h = 64. Each model layer has an intermediate representation with dimension dff = 2048. The "Simple LSTM" used a hidden size of 2048. The "Attentional LSTM” used an encoder of 512 hidden units and decoding LSTM with 2048 hidden units. The LSTMs were also fed zero input before outputting an answer, to allow for additional computational steps. \\
 
-Specific care was put into deterministically conducting training and benchmarking. We used fixed seeds for shuffling data, Numpy, and PyTorch. Cudnn was set to deterministic mode. \\
+Specific care was put into deterministically conducting training and benchmarking. We used fixed seeds for shuffling data, Numpy, and PyTorch. PyTorch and Cudnn were set to deterministic mode. We tested and confirmed that running the training code multiple times on the same machine results in identical learning trajectories. \\
 
 We include two ablation studies: one with a batch size of 128 and another with a learning rate of 6e-6. \\
 
-Our open-source repository[] includes the training and benchmarking code. Instructions for installation and running both training and benchmarking are in the readme. Training logs are viewable with TensorBoard. Checkpoint model files are available in the repository's releases section, including each of the 4 completed epochs, the final 500k batch version, and our ablation study. \\
+Our open-source repository[] includes the training and benchmarking code. The 112 million datapoint, 7.8GB dataset is downloaded from the public site provided by by the authors[]. Instructions for installation and running both training and benchmarking are in the readme. Training logs are viewable with TensorBoard. Checkpoint model files are available in the repository's releases section, including each of the 4 completed epochs, the final 500k batch version, and our ablation study. \\
 
-\textbf{System and cost} \\
+\subsection{System and Cost} \\
 
-For future reproducibility efforts, we describe our compute for running the experiments. We deployed to Google Cloud Platform. Our experiments utilized preemptible (also known as spot) virtual machine instances, deterministic shuffling, and checkpointing to reduce costs by about two thirds. \\
+For future reproducibility efforts, we describe our compute for running the experiments. We deployed to Google Cloud Platform region us-central1-b. Our experiments utilized preemptible (also known as spot) virtual machine instances, deterministic shuffling, and mid-epoch checkpointing, which reduced costs by about two thirds. \\
 
 Total cost for training the Transformer model in region us-central1 was approximately \$1350. 97GB of VRAM was required to support a batch size of 1024, so 8 NVIDIA V100s were attached to a n1-standard-8 virtual machine. Training took approximately [32 hours] for 500k batches. \\
 
 
 
+\section{Results}
+
+\subsection{Transformer Performance}
+
+%% Brief Explanation of performance in words
+
+After training, our transformer achieved ... The puts our model .... with regard to the original papers model. A side to side performance comparison 
+
+%%% Have figure showing the accuracy of our transformer vs. their transformer of average of interpolation/extrapolation performances
+
+\begin{figure}[h]
+\includegraphics[width=8cm]{images/test_image.PNG}
+\centering
+\caption{This figure shows the comparison of our transformer vs. the transformer by the original authors}
+
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{tabular}{SSSSSSSS} 
+    {} & {\textbf{Interpolation}} & {\textbf{Extrapolation}} & {Delta} \\ \midrule
+    \makecell{\textbf{Transformer} // \textbf{Transformer} (ours) } & 16.128 & +8.872  \\
+    \textbf{Transformer} (ours)   & 3.442  & -2.509  \\ \midrule
+    Attentional \textbf{LSTM}  & 1.29   & +0.099 \\
+    Attentional \textbf{LSTM} (ours)  & 0.483  & -0.183 \\ \midrule
+    Regular \textbf{LSTM}  & 0.624  & +0.365 \\ 
+    Regular \textbf{LSTM} (ours)  & 0.641  & -0.466  \\ \bottomrule
+\end{tabular}
+\caption{Table of Model Performances}
+\end{figure}
 
 
-\subsubsection{
+\begin{figure}[h]
+\centering
+\begin{tabular}{SSSSSSSS} 
+    {} & {\textbf{Interpolation}} & {\textbf{Extrapolation}} \\ \midrule
+    \textbf{Transformer}  & 16.128 & +8.872  \\
+    \textbf{Transformer} (ours)   & 3.442  & -2.509  \\ \midrule
+    Attentional \textbf{LSTM}  & 1.29   & +0.099 \\
+    Attentional \textbf{LSTM} (ours)  & 0.483  & -0.183 \\ \midrule
+    Regular \textbf{LSTM}  & 0.624  & +0.365 \\ 
+    Regular \textbf{LSTM} (ours)  & 0.641  & -0.466  \\ \bottomrule
+\end{tabular}
+\caption{Table of Model Performances}
+\end{figure}
+
+\subsection{LSTM Performance}
+
+The results for both the attentional and regular LSTM showed ... This puts them ... Figure ... shows 
+
+\begin{figure}
+\centering
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=3cm]{images/test_image.PNG}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=3cm]{images/test_image.PNG}
+  \label{fig:sub2}
+\end{subfigure}
+\caption{This figure shows a performance comparison of our attentional and regular LSTMs versus the respective LSTMs trained in the original paper}
+\label{fig:test}
+\end{figure}
+
+
+\section{Analysis and Discussion}
+
+
+\section{Conclusion}
