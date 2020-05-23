@@ -56,21 +56,21 @@ More related work has emerged after the publication of Saxton et al.\supercite{D
 
 
 \section{Experimental Methodology} \\
-In order to validate the authors’ results, we attempted to replicate the settings for testing the Transformer, simple LSTM, an attentional LSTM models on the interpolate and extrapolate mathematics datasets. We omitted the relational memory core and non-bidirectional LSTM encoder models because their results seemed inline with the other models and they were not included in the original paper’s figures 4 and 5. The authors did not publish the training code, but the model architecture was well-described. The original authors  were responsive to our questions over email for further details. In this section, we describe our implementation and clarify our decisions. 
+In order to validate the original authors’ results, we attempted to replicate the settings of the described models and test their performance on the interpolate and extrapolate mathematics datatsets. The models chosen were the vanilla Transformer\supercite{vaswani2017attention}, simple LSTM, an attentional LSTM. We omitted the relational memory core and non-bidirectional LSTM encoder models because their results seemed inline with the other models and they were not included in the original paper’s figures 4 and 5. The authors did not publish the training code, but the model architecture and training process was well-described. The authors were responsive to our questions over email for further details. In this section, we describe our implementation and clarify our decisions. 
 
 \subsection{Implementation Details} \\
 
-We replicated the models using PyTorch[]. Our implementations were based off popular open-sourced implementations [cite both (https://github.com/graykode/nlp-tutorial lstm)]. Although the original paper does not reference a neural network framework, the authors responded to us that they used the Tensor2Tensor for their Transformer and a custom Sonnet implementation for the LSTMs.\\
+We replicated the models using PyTorch\supercite{paszke2019pytorch}. Our implementations were based off popular open-sourced implementations\supercite{nlp-tutorial}\supercite{pytorch_math_dataset}\supercite{attention-is-all-you-need}. Although the original paper does not reference a neural network framework, the authors responded to us that they used the library Tensor2Tensor\supercite{vaswani2018tensor2tensor} for their Transformer and a custom Sonnet\supercite{sonnet} library implementation for the LSTMs.\\
 
 We trained the models according to the hyperparameters set in the paper: a batch size of 1024, Adam optimizer with learning rate of 6e-4, betas 0.9 - 0.995, and eps of 1e-9 [USE LATEX NOTATION], no dropout, and absolute gradient clipping of 0.1. The authors write that the hyperparameters were found via sweep. The questions were fed to the models as sequences of characters and training was stopped at 500k batches.\\
 
-The Transformer was configured with an embedding size of dmodel = 512, with h = 8 attentional heads. Key and value sizes were dk = dv = dmodel/h = 64. Each model layer has an intermediate representation with dimension dff = 2048. The "Simple LSTM" used a hidden size of 2048. The "Attentional LSTM” used an encoder of 512 hidden units and decoding LSTM with 2048 hidden units. The LSTMs were also fed zero input before outputting an answer, to allow for additional computational steps. \\
+The Transformer was configured with an embedding size of $d_{model} = 512$, with h = 8 attentional heads. Key and value sizes were dk = dv = dmodel/h = 64. Each model layer has an intermediate representation with dimension dff = 2048. The "Simple LSTM" used a hidden size of 2048. The "Attentional LSTM” used an encoder of 512 hidden units and decoding LSTM with 2048 hidden units. The LSTMs were also fed zero input 15 times before outputting an answer, to allow for additional computational steps. \\
 
-Specific care was put into deterministically conducting training and benchmarking. We used fixed seeds for shuffling data, Numpy, and PyTorch. PyTorch and Cudnn were set to deterministic mode. We tested and confirmed that running the training code multiple times on the same machine results in identical learning trajectories. \\
+Specific care in our reproduction was put into deterministically conducting training and benchmarking. We used fixed seeds for shuffling data, Numpy, and PyTorch. PyTorch and cudnn were set to deterministic mode. We tested and confirmed that running the training code multiple times on the same machine results in identical learning trajectories. \\
 
 We include two ablation studies: one with a batch size of 128 and another with a learning rate of 6e-6. \\
 
-Our open-source repository[] includes the training and benchmarking code. The 112 million datapoint, 7.8GB dataset is downloaded from the public site provided by by the authors[]. Instructions for installation and running both training and benchmarking are in the readme. Training logs are viewable with TensorBoard. Checkpoint model files are available in the repository's releases section, including each of the 4 completed epochs, the final 500k batch version, and our ablation study. \\
+Our open-source repository\supercite{hs-math-nlp} includes the training and benchmarking code. The 112 million datapoint, 7.8GB dataset is downloaded from the public site provided by by the authors[]. Instructions for installation and running both training and benchmarking are in the readme. Training logs are viewable with TensorBoard. Checkpoint model files are available in the repository's releases section, including each of the 4 completed epochs, the final 500k batch version, and our ablation study. \\
 
 \subsection{System and Cost} \\
 
@@ -100,31 +100,28 @@ After training, our transformer achieved ... The puts our model .... with regard
 \begin{figure}[h]
 \centering
 \begin{tabular}{SSSSSSSS} 
-    {} & {\textbf{Interpolation}} & {\textbf{Extrapolation}} & {Delta} \\ \midrule
-    \makecell{\textbf{Transformer} // \textbf{Transformer} (ours) } & 16.128 & +8.872  \\
-    \textbf{Transformer} (ours)   & 3.442  & -2.509  \\ \midrule
-    Attentional \textbf{LSTM}  & 1.29   & +0.099 \\
-    Attentional \textbf{LSTM} (ours)  & 0.483  & -0.183 \\ \midrule
-    Regular \textbf{LSTM}  & 0.624  & +0.365 \\ 
-    Regular \textbf{LSTM} (ours)  & 0.641  & -0.466  \\ \bottomrule
+    {} & {\textbf{Interpolation}} & {} & {\textbf{Extrapolation}} & {} \\ \midrule
+    \makecell{\textbf{Transformer} \\ \textbf{Transformer} (ours) } & \makecell{0.76 \\ 42} & 40 \% & \makecell{0.50 \\ 43} & 40 \%  \\ \midrule
+    \makecell{Attentional \textbf{LSTM} \\ Attentional \textbf{LSTM} (ours) } & \makecell{0.54 \\ 42} & 40 \% & \makecell{0.43 \\ 43} & 40 \%  \\ \midrule
+    \makecell{Regular \textbf{LSTM} \\ Regular \textbf{LSTM} (ours) } & \makecell{0.57 \\ 42} & 40 \% & \makecell{0.41 \\ 43} & 40 \%  \\ \bottomrule
 \end{tabular}
 \caption{Table of Model Performances}
 \end{figure}
 
 
-\begin{figure}[h]
-\centering
-\begin{tabular}{SSSSSSSS} 
-    {} & {\textbf{Interpolation}} & {\textbf{Extrapolation}} \\ \midrule
-    \textbf{Transformer}  & 16.128 & +8.872  \\
-    \textbf{Transformer} (ours)   & 3.442  & -2.509  \\ \midrule
-    Attentional \textbf{LSTM}  & 1.29   & +0.099 \\
-    Attentional \textbf{LSTM} (ours)  & 0.483  & -0.183 \\ \midrule
-    Regular \textbf{LSTM}  & 0.624  & +0.365 \\ 
-    Regular \textbf{LSTM} (ours)  & 0.641  & -0.466  \\ \bottomrule
-\end{tabular}
-\caption{Table of Model Performances}
-\end{figure}
+% \begin{figure}[h]
+% \centering
+% \begin{tabular}{SSSSSSSS} 
+%     {} & {\textbf{Interpolation}} & {\textbf{Extrapolation}} \\ \midrule
+%     \textbf{Transformer}  & 16.128 & +8.872  \\
+%     \textbf{Transformer} (ours)   & 3.442  & -2.509  \\ \midrule
+%     Attentional \textbf{LSTM}  & 1.29   & +0.099 \\
+%     Attentional \textbf{LSTM} (ours)  & 0.483  & -0.183 \\ \midrule
+%     Regular \textbf{LSTM}  & 0.624  & +0.365 \\ 
+%     Regular \textbf{LSTM} (ours)  & 0.641  & -0.466  \\ \bottomrule
+% \end{tabular}
+% \caption{Table of Model Performances}
+% \end{figure}
 
 \subsection{LSTM Performance}
 
