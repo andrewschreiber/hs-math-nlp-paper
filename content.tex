@@ -13,111 +13,74 @@
 
 \subsubsection{Introduction}
 
-Sequence to sequence models such as the Transformer have provided 
+% Motivate importance of field
+%           Deep learning has revolutionized a lot of fields (specifically seq to seq) 
+%           Mathematical Reasoning is ripe for the same type of revolution 
+%               One sentence explanation of mathematical reasoning 
+Deep learning, and more recently the advent of sequence to sequence models have notably raised bar on benchmarks in a wide range of 
+areas where humans excel. Some of these include visual reasoning (cite), understanding language (cite), and playing games like Chess or Go (cite). \\ 
 
-However the same is not true for mathematical reasoning. This type of reasoning, which involves a wide array of cognitive skills and generalization ability, is widely unexplored in the broader machine learning literature. 
+However a separate type of reasoning that is used just as much by humans as the others--mathematical reasoning--is still relatively unexplored in the machine learning literature (cite) . This type of reasoning involves using  wide array of cognitive skills and learned generalization ability to manipulate symbols and formal systems via logical rules. If the same techniques that were successful on other types of reasoning could be applied to mathematical reasoning we might be able to learn a lot about how this type of reasoning works and also drastically improve the performance computers have on problems that require this. \\ 
 
+% Explain the contributions of Saxton et al. 
+%           New Dataset
+%           Sequence to sequence  Model Performance 
+
+Towards this goal, the authors of Saxton et al. \supercite{DBLP:journals/corr/abs-1904-01557}  provide two key contributions. They, 
+
+\begin{itemize}
+   \item Introduce a novel and robust dataset of mathematical tasks including problems from algebra, probability, calculus, etc.
+   \item Conduct initial deep learning experiments by evaluating multiple sequence to sequence models on their dataset 
+\end{itemize}
+
+Diving more into the first contribution, the dataset the authors introduce contains a variety of mathematical problems in a sequence to sequence format. In additional to these pre-generated questions, they also provide code that allows one to generate even more mathematics problems with a similar structure to those that were pre-generated. They hope that this curated set of mathematics problems will eventually serve as a benchmark for models trying to demonstrate exceptional mathematical reasoning.  \\
+
+For their second contribution, they train a modern transformer network and a variety of LSTM networks \supercite{hochreiter1997long} to demonstrate how sequence to sequence models perform on their dataset. They find that performance is good many different types of problem but definitely not all. They also find that in general, the trained sequence to sequence models do not achieve good generalization metrics across different problem types.  \\ 
+
+% Stating what we are reproducing and why we think the reproduction is valuable 
+
+In this work, we reproduce the paper of Saxton et al.\supercite{DBLP:journals/corr/abs-1904-01557}. We detail our methodology and challenges (Section 0.0 ), test model performance on the released interpolation and extrapolation mathematics datasets (Section 0.0), compare the published results to our findings (Section 0.0),  and release an ablation study (Section 0.0).  Our source code and model files are available on GitHub [1].
 
 
 \subsubsection{Related Work}
 
-There have been a couple recent studies exploring mathematical reasoning. \supercite{Topalidou:2015}
+% Related Work from Saxton Paper (2 paragraphs)
+There have been a couple studies prior to Saxton et al. \supercite{DBLP:journals/corr/abs-1904-01557} exploring mathematical reasoning and discrete reasoning in general. For example, work has been done to solve addition and multiplication tasks using variations of convolutions neural networks that achieve good generalization properties \supercite{kaiser2015neural}. Other research has pursued "neural equivalence networks" for learning tasks related to symbolic algebra and boolean expressions \supercite{allamanis2017learning}. Finally there has also been progress by Evan et al. using tree-structured neural networks to understand logical entailment \supercite{evans2018neural}.   \\
 
-In contrast to these studies, Saxton et al. (cite) carves out its niche by providing a novel dataset of mathematics tasks ranging from algebra, arithmetic, and probability to calculus and number theory.   
-
-\subsubsection{ReScience C \& ReScience X}
-
-The biggest and most visible change we would like to propose is to change the
-name of the journal ``ReScience'' in favor of ``ReScience C'' where the C
-stands for (c)omputational. This change would be necessary to have consistent
-naming with the upcoming creation of the ``ReScience X'' journal that will be
-dedicated to e(x)perimental replications and co-directed by E.Roesch
-(University of Reading) and N.Rougier (University of Bordeaux). The name
-``ReScience'' would then be used for the name of a non-profit organization
-(that is yet to be created) for the two journals as well as future journals
-(such as the utopian CoScience\supercite{Rougier:2017} or a future and
-tentative ``ReScience T'' for theoretical science).
+Furthermore, past research efforts have gone into solving algebraic word problems. These types of problems involve formulating algebraic equations into a sentence or paragraph which forces the student to reassemble and solve the equation uses the sentences logic directly. From the attention given to solving these, many useful datasets have arisen. Examples of datasets include those created by the Allen Institute for AI, Kushman et al. \supercite{kushman2014learning}, Huang et al. \supercite{huang2016well},  Upadhyay \& Chang \supercite{upadhyay2016annotating}, Wang et al. \supercite{wang2017deep}, and Ling et al. \supercite{ling2017program}. These datasets all vary heavily but there is a general trend toward including more narrow types of problems and providing supervised data about how to reason about specific problem types.  \\
 
 
-\subsubsection{A new submission process}
+%Contrast Saxton et al. with relevant work and explain the space in which it was published 
+In contrast to these studies, Saxton et al. \supercite{DBLP:journals/corr/abs-1904-01557} carves out its niche by providing a novel dataset of mathematics tasks ranging from algebra, arithmetic, and probability to calculus and number theory. This dataset focus directly on the mathematics reasoning rather the underlying linguistic interpretation used within solving word problems and also includes more variety in the areas of mathematics it covers. The paper authors purposely try to isolate the mathematical reasoning from the linguistic interpretation in order to only measure that capacity. \\
 
-The current submission process requires authors to fork, clone and branch the
-submission repository in order to write their article and to place code and
-data at the relevant places in the forked repository. Once done, authors have
-to push their changes and to make a pull request that is considered as a
-submission. This process is cumbersome for authors and has induced many
-troubles for editors as well once the article is accepted and ready to be
-published, mostly because of the complexity of the editing procedure. In order
-to make life easier for everyone, we greatly simplified the submission process
-for ReScience C and X. Authors are now responsible for getting a DOI for their
-code \& data and only have to submit a PDF and a metadata file in a GitHub
-issue.
-We also provide Python programs that largely automate the subsequent editing
-process. We will still archive the submission on Zenodo but this archive will
-be made for the final PDF only. However, both the PDF and the Zenodo entry will
-contain all associated DOIs (data and code).
+% Related Work that has happened since the release of Saxton Paper (1 paragraph) 
+More related work has emerged after the publication of Saxton et al.\supercite{DBLP:journals/corr/abs-1904-01557} that is related in spirit. For example, Lample \& Charton \supercite{lample2019deep} use deep learning to solve more elaborate mathematical tasks such as symbolic integration and differential equations with surprising success.  Additionally, Wallace et al. \supercite{wallace2019nlp} investigated how well language models embed numbers finding that many common language embeddings excel on a variety of numeracy tasks. This supports the idea that language embedding currently capture numeracy to a high degree. \\
 
 
-\subsubsection{A simplified publishing process}
+\textbf{Implementation Details} \\
 
-In ReScience, we have have been using a combination of
-\href{https://daringfireball.net/projects/markdown/syntax}{markdown} and
-\href{http://pandoc.org/}{pandoc} for producing both the draft and the final
-version of all the published articles. This had worked reasonably well until it
-started to cause all kind of problems for both authors and editors, especially
-with the reference and citation plugins. Consequently, articles will be now
-submitted directly in PDF with accompanying metadata in a separate file using
-the \href{https://en.wikipedia.org/wiki/YAML}{YAML} format (they were
-previously embedded in the markdown file). Once an article has been accepted,
-authors will be responsible for updating the metadata and for rebuilding the PDF if
-necessary. We could also consider using the
-\href{https://github.com/openjournals/whedon}{Whedon} API that helps with automating
-most of the editorial tasks for \href{http://joss.theoj.org/}{JOSS} and
-\href{http://jose.theoj.org/}{JOSE}. This will most probably require some
-tweaking because our publishing pipeline is a bit different.
+We replicated the Transformer and Attentional LSTM architectures described in the paper using PyTorch[]. Our implementations were based off popular open-sourced implementations. Although the original paper does not reference a neural network framework, the authors responded to us that they used the Tensor2Tensor for their Transformer and a custom Sonnet implementation for the LSTM. \\
 
+The 112 million datapoint, 7.8GB dataset was downloaded from the public site provided by by the authors[]. We trained the models according to the parameters set in the paper. The 5th epoch was stopped midway in order to hit exactly 500k batches. \\
 
-\subsubsection{A new design}
+For the Transformer, we used a batch size of 1024. Adam optimizer was setup with a learning rate of 6e-6, betas 0.9 - 0.995, and eps of 1e-9. The Transformer was configured with an embedding size of dmodel = 512, with h = 8 attentional heads. Key and value sizes were dk = dv = dmodel/h = 64. Each model layer has an intermediate representation with dimension dff = 2048. \\
 
-The combination of markdown and pandoc has also severely limited the layout and
-style possibilities for the article template and since we are switching to
-\LaTeX, this is the opportunity to propose a new design based on a more elegant
-style, using a new font stack\supercite{SourceSerifPro:2014, Roboto:2011,
-  SourceCodePro:2012} (you are currently reading it). The goal is to have a
-subtle but strong identity with enhanced readability. Considering that articles
-will be mostly read on screen (as opposed to printed), we can benefit from a
-more ethereal style. Once this design will have stabilized, an
-\href{https://www.overleaf.com/}{overleaf} template will be made available for
-those without a \TeX~installation. If a \TeX~expert is ready to help review
-the template (and possibly rewrite it as a class), their help would be much
-welcome and appreciated. The same holds for LibreOffice, Word or Pages, any
-template is welcome, just contact us beforehand such that we can coordinate
-efforts.
+[LSTM DETAILS HERE] \\
 
-\subsubsection{Results}
+Specific care was put into deterministically conducting training and benchmarking. We used fixed seeds for shuffling data, Numpy, and PyTorch. Cudnn was set to deterministic mode. \\
 
-\subsubsection{Discussion}
+We include two ablation studies: one with a batch size of 128 and another with a learning rate of 6e-6. \\
+
+Our open-source repository[] includes the training and benchmarking code. Instructions for installation and running both training and benchmarking are in the readme. Training logs are viewable with TensorBoard. Checkpoint model files are available in the repository's releases section, including each of the 4 completed epochs, the final 500k batch version, and our ablation study. \\
+
+\textbf{System and cost} \\
+
+For future reproducibility efforts, we describe our compute for running the experiments. We deployed to Google Cloud Platform. Our experiments utilized preemptible (also known as spot) virtual machine instances, deterministic shuffling, and checkpointing to reduce costs by about two thirds. \\
+
+Total cost for training the Transformer model in region us-central1 was approximately \$1350. 97GB of VRAM was required to support a batch size of 1024, so 8 NVIDIA V100s were attached to a n1-standard-8 virtual machine. Training took approximately [32 hours] for 500k batches. \\
 
 
-\subsubsection{Conclusion}
 
 
-\subsubsection{Editorials, letters and special issues}
 
-ReScience C remains dedicated to the publication of computational replications
-but we (i.e., the editorial team) would like to have the opportunity to
-publish \emph{editorials} when deemed necessary and to give anyone the
-opportunity to write \emph{letters} to the community on a specific topic
-related to reproducibility. Both editorials and letters are expected to be 1 or
-2 pages long (but no hard limit will be enforced), will be (quickly) peer reviewed,
-and will be assigned a DOI. Furthermore, with the advent of reproducibility
-hackatons worldwide, we will host {\em special issues} with guest editors (such
-as, for example, the organizers of a hackaton) in order to publish the results
-and to enhance their discoverability. Each entry will have to go through the
-regular open peer-reviewed pipeline.\\
-
-
-We hope that most readers will agree on the proposed changes such that we can
-commit to them in the next few weeks. The review for this editorial is open (as
-usual) and anyone can comment on and/or oppose any of the proposed changes. New
-ideas are also welcome.
+\subsubsection{
