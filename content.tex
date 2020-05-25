@@ -18,12 +18,18 @@
 Deep learning, and more recently the advent of sequence to sequence models have notably raised bar on benchmarks in a wide range of 
 areas where humans excel. Some of these include visual reasoning (cite), understanding language (cite), and playing games like Chess or Go (cite). \\ 
 
+\begin{figure}[hbt!]
+\includegraphics[width=12cm]{images/math_examples_bunch.PNG}
+\centering
+\caption{A sample set of math questions drawn from the novel dataset. This figure was taken directly from the original Saxton et al. paper \supercite{DBLP:journals/corr/abs-1904-01557}}
+\label{fig:mathexamples}
+\end{figure}
+
 However a separate type of reasoning that is used just as much by humans as the others--mathematical reasoning--is still relatively unexplored in the machine learning literature (cite) . This type of reasoning involves using  wide array of cognitive skills and learned generalization ability to manipulate symbols and formal systems via logical rules. If the same techniques that were successful on other types of reasoning could be applied to mathematical reasoning we might be able to learn a lot about how this type of reasoning works and also drastically improve the performance computers have on problems that require this. \\ 
 
 % Explain the contributions of Saxton et al. 
 %           New Dataset
 %           Sequence to sequence  Model Performance 
-
 Towards this goal, the authors of Saxton et al. \supercite{DBLP:journals/corr/abs-1904-01557}  provide two key contributions. They, 
 
 \begin{itemize}
@@ -31,7 +37,8 @@ Towards this goal, the authors of Saxton et al. \supercite{DBLP:journals/corr/ab
    \item Conduct initial deep learning experiments by evaluating multiple sequence to sequence models on their dataset 
 \end{itemize}
 
-Diving more into the first contribution, the dataset the authors introduce contains a variety of mathematical problems in a sequence to sequence format. In additional to these pre-generated questions, they also provide code that allows one to generate even more mathematics problems with a similar structure to those that were pre-generated. They hope that this curated set of mathematics problems will eventually serve as a benchmark for models trying to demonstrate exceptional mathematical reasoning.  \\
+Diving more into the first contribution, the dataset the authors introduce contains a variety of mathematical problems in a sequence to sequence format. In additional to these pre-generated questions, they also provide code that allows one to generate even more mathematics problems with a similar structure to those that were pre-generated. A set of example mathematics problems in this dataset along with their solutions can been seen in Figure ~\ref{fig:mathexamples}. They hope that this curated set of mathematics problems will eventually serve as a benchmark for models trying to demonstrate exceptional mathematical reasoning.  \\
+
 
 For their second contribution, they train a modern transformer network and a variety of LSTM networks \supercite{hochreiter1997long} to demonstrate how sequence to sequence models perform on their dataset. They find that performance is good many different types of problem but definitely not all. They also find that in general, the trained sequence to sequence models do not achieve good generalization metrics across different problem types.  \\ 
 
@@ -62,7 +69,7 @@ In order to validate the original authors’ results, we attempted to replicate 
 
 We replicated the models using PyTorch\supercite{paszke2019pytorch}. Our implementations were based off popular open-sourced implementations\supercite{nlp-tutorial}\supercite{pytorch_math_dataset}\supercite{attention-is-all-you-need}. Although the original paper does not reference a neural network framework, the authors responded to us that they used the library Tensor2Tensor\supercite{vaswani2018tensor2tensor} for their Transformer and a custom Sonnet\supercite{sonnet} library implementation for the LSTMs.\\
 
-We trained the models according to the hyperparameters set in the paper: a batch size of 1024, Adam optimizer with learning rate of 6e-4, betas 0.9 - 0.995, and eps of 1e-9 [USE LATEX NOTATION], no dropout, and absolute gradient clipping of 0.1. The authors write that the hyperparameters were found via sweep. The questions were fed to the models as sequences of characters and training was stopped at 500k batches.\\
+We trained the models according to the hyperparameters set in the paper: a batch size of 1024, Adam optimizer with learning rate of $6 \times 10^{-4}$, betas 0.9 - 0.995, and eps of 1e-9 [USE LATEX NOTATION], no dropout, and absolute gradient clipping of 0.1. The authors write that the hyperparameters were found via sweep. The questions were fed to the models as sequences of characters and training was stopped at 500k batches.\\
 
 The Transformer was configured with an embedding size of $d_{model} = 512$, with h = 8 attentional heads. Key and value sizes were dk = dv = dmodel/h = 64. Each model layer has an intermediate representation with dimension dff = 2048. The "Simple LSTM" used a hidden size of 2048. The "Attentional LSTM” used an encoder of 512 hidden units and decoding LSTM with 2048 hidden units. The LSTMs were also fed zero input 15 times before outputting an answer, to allow for additional computational steps. \\
 
@@ -70,7 +77,7 @@ Specific care in our reproduction was put into deterministically conducting trai
 
 We include two ablation studies: one with a batch size of 128 and another with a learning rate of 6e-6. \\
 
-Our open-source repository\supercite{hs-math-nlp} includes the training and benchmarking code. The 112 million datapoint, 7.8GB dataset is downloaded from the public site provided by by the authors[]. Instructions for installation and running both training and benchmarking are in the readme. Training logs are viewable with TensorBoard. Checkpoint model files are available in the repository's releases section, including each of the 4 completed epochs, the final 500k batch version, and our ablation study. \\
+Our open-source repository\supercite{hs-math-nlp} includes the training and benchmarking code. The 112 million datapoint, 7.8GB dataset is downloaded from the public site provided by by the authors\supercite{dataset}. Instructions for installation and running both training and benchmarking are in the readme. Training logs are viewable with TensorBoard\supercite{tensorboard}. Checkpoint model files are available in the repository's releases section, including each of the 4 completed epochs, the final 500k batch version, and our ablation study. \\
 
 \subsection{System and Cost} \\
 
