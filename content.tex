@@ -15,17 +15,16 @@
 %           Deep learning has revolutionized a lot of fields (specifically seq to seq) 
 %           Mathematical Reasoning is ripe for the same type of revolution 
 %               One sentence explanation of mathematical reasoning 
-Deep learning, and more recently the advent of sequence to sequence models have notably raised bar on benchmarks in a wide range of 
-areas where humans excel. Some of these include visual reasoning (cite), understanding language (cite), and playing games like Chess or Go (cite). \\ 
+Deep learning, and more recently the advent of sequence to sequence models has raised the bar on benchmarks in a wide range of areas where humans excel. Some of these include visual reasoning \supercite{voulodimos2018deep}, interpreting / writing text \supercite{radford2019language}, and playing games like Chess or Go \supercite{silver2017mastering}. \\ 
+
+However, a separate type of reasoning--mathematical reasoning--is still an area where humans excel and outperform neural models. This type of reasoning involves using  wide array of cognitive skills and learned generalization ability to manipulate symbols and formal systems via logical rules. If the same techniques that were successful on other types of reasoning could be applied to mathematical reasoning researchers might learn a lot about how this type of reasoning works and begin to drastically improve the performance computers have on problems that require this set of skills. \\ 
 
 \begin{figure}[hbt!]
-\includegraphics[width=12cm]{images/math_examples_bunch.PNG}
+\includegraphics[width=12cm]{images/math_examples_bunch_reduced.PNG}
 \centering
-\caption{A sample set of math questions drawn from the novel dataset. This figure was taken directly from the original Saxton et al. paper \supercite{DBLP:journals/corr/abs-1904-01557}}
+\caption{A sample set of math questions drawn from the novel dataset. These questions were taken directly from Figure 1 in the original Saxton et al. paper \supercite{DBLP:journals/corr/abs-1904-01557}}
 \label{fig:mathexamples}
 \end{figure}
-
-However a separate type of reasoning that is used just as much by humans as the others--mathematical reasoning--is still relatively unexplored in the machine learning literature (cite) . This type of reasoning involves using  wide array of cognitive skills and learned generalization ability to manipulate symbols and formal systems via logical rules. If the same techniques that were successful on other types of reasoning could be applied to mathematical reasoning we might be able to learn a lot about how this type of reasoning works and also drastically improve the performance computers have on problems that require this. \\ 
 
 % Explain the contributions of Saxton et al. 
 %           New Dataset
@@ -37,14 +36,13 @@ Towards this goal, the authors of Saxton et al. \supercite{DBLP:journals/corr/ab
    \item Conduct initial deep learning experiments by evaluating multiple sequence to sequence models on their dataset 
 \end{itemize}
 
-Diving more into the first contribution, the dataset the authors introduce contains a variety of mathematical problems in a sequence to sequence format. In additional to these pre-generated questions, they also provide code that allows one to generate even more mathematics problems with a similar structure to those that were pre-generated. A set of example mathematics problems in this dataset along with their solutions can been seen in Figure ~\ref{fig:mathexamples}. They hope that this curated set of mathematics problems will eventually serve as a benchmark for models trying to demonstrate exceptional mathematical reasoning.  \\
+Diving into the first contribution, the dataset the authors introduce contains a variety of mathematical problems in a sequence to sequence format. In addition to these pre-generated questions, they also provide code that allows one to generate more mathematics examples with a similar structure to those that were pre-generated. A couple example mathematics problems from this dataset along with their solutions can been seen in Figure ~\ref{fig:mathexamples}. They hope that this curated set of mathematics problems will serve as a benchmark for models trying to demonstrate exceptional mathematical reasoning.  \\
 
-
-For their second contribution, they train a modern transformer network and a variety of LSTM networks \supercite{hochreiter1997long} to demonstrate how sequence to sequence models perform on their dataset. They find that performance is good many different types of problem but definitely not all. They also find that in general, the trained sequence to sequence models do not achieve good generalization metrics across different problem types.  \\ 
+For their second contribution, the authors train a modern transformer network \supercite{vaswani2017attention} and a variety of LSTM networks \supercite{hochreiter1997long} to demonstrate how sequence to sequence models perform on their dataset. They find that performance is good on many different problem types but not universally. They also find that, in general, the trained sequence to sequence models do not achieve good generalization metrics across different problem types.  \\ 
 
 % Stating what we are reproducing and why we think the reproduction is valuable 
 
-In this work, we reproduce the paper of Saxton et al.\supercite{DBLP:journals/corr/abs-1904-01557}. We detail our methodology and challenges (Section 0.0 ), test model performance on the released interpolation and extrapolation mathematics datasets (Section 0.0), compare the published results to our findings (Section 0.0),  and release an ablation study (Section 0.0).  Our source code and model files are available on GitHub [1].
+In this work, we reproduce the paper of Saxton et al.\supercite{DBLP:journals/corr/abs-1904-01557}. We detail our methodology and challenges (Section 3), test model performance on the released interpolation and extrapolation mathematics datasets (Section 4), compare the published results to our findings (Section 4.1),  and release an ablation study (Section 4.2).  Our source code and model files are available on GitHub\supercite{hs-math-nlp}.
 
 
 \section{Related Work}
@@ -63,21 +61,44 @@ More related work has emerged after the publication of Saxton et al.\supercite{D
 
 
 \section{Experimental Methodology} \\
-In order to validate the original authors’ results, we attempted to replicate the settings of the described models and test their performance on the interpolate and extrapolate mathematics datatsets. The models chosen were the vanilla Transformer\supercite{vaswani2017attention}, simple LSTM, an attentional LSTM. We omitted the relational memory core and non-bidirectional LSTM encoder models because their results seemed inline with the other models and they were not included in the original paper’s figures 4 and 5. The authors did not publish the training code, but the model architecture and training process was well-described. The authors were responsive to our questions over email for further details. In this section, we describe our implementation and clarify our decisions. 
+In order to validate the original authors’ results, we attempted to replicate the settings of the described models and test their performance on the interpolate and extrapolate mathematics datatsets. The models chosen were the vanilla Transformer\supercite{vaswani2017attention}, simple LSTM, an attentional LSTM. We omitted the relational memory core and non-bidirectional LSTM encoder models because their results seemed inline with the other models and they were not included in the original paper’s benchmark figures 4 and 5. The authors did not publish the training code, but the model architecture and training process was well-described. The authors were responsive to our questions over email for further details. In this section, we describe our implementation and clarify our decisions.
 
+\subsection{Dataset \\}
+The original authors published both an algorithm for generating math problems and a synthetic math problem dataset for benchmarking. The 112 million datapoint, 7.8GB dataset was downloaded from the public site provided by by the authors\supercite{dataset}. The dataset is organized into 7 major areas and their subcategories, leading to 56 modules of math problems each with 2 million question-answer pairs. Each math problem and solution has a max character length of 160 and 30, respectively, and uses plain-text SymPy\supercite{sympy} notation.
+
+Interpolate and Extrapolate sets
+
+\begin{figure}[h]
+\begin{verse}{}
+\textbf{Algebra}: Solve 885*i + 5006 - 14741 = 0 for i.  \\
+\textbf{Answer}: 11 \\
+\textbf{Arithmetic}: Calculate 101 - 594/(-810)*-139. \\
+\textbf{Answer}: -14/15 \\
+\textbf{Calculus}: Find the second derivative of 10490087*j*z**2 - 4460*j - 179*z wrt z.\\
+\textbf{Answer}: 20980174*j \\
+\textbf{Comparison}: Let z(k) = -644*k**2 - 420*k - 13. Let t be z(-3). Which is smaller: -4547 or t?\\
+\textbf{Answer}: t\\
+\textbf{Measurement}: How many minutes are there between 10:25 AM and 10:13 PM?\\
+\textbf{Answer}: 708\\
+
+
+\end{verse}
+\caption{Examples problems from multiple modules in the original papers dataset}
+\end{figure}
+ 
 \subsection{Implementation Details} \\
 
-We replicated the models using PyTorch\supercite{paszke2019pytorch}. Our implementations were based off popular open-sourced implementations\supercite{nlp-tutorial}\supercite{pytorch_math_dataset}\supercite{attention-is-all-you-need}. Although the original paper does not reference a neural network framework, the authors responded to us that they used the library Tensor2Tensor\supercite{vaswani2018tensor2tensor} for their Transformer and a custom Sonnet\supercite{sonnet} library implementation for the LSTMs.\\
+We replicated the sequence to sequence models using PyTorch\supercite{paszke2019pytorch}. Our implementations were based off popular open-sourced implementations\supercite{nlp-tutorial}\supercite{pytorch_math_dataset}\supercite{attention-is-all-you-need}. Although the original paper does not reference a neural network framework, the authors responded to us that they used the library Tensor2Tensor\supercite{vaswani2018tensor2tensor} for their Transformer and a custom Sonnet\supercite{sonnet} library implementation for the LSTMs.\\
 
-We trained the models according to the hyperparameters set in the paper: a batch size of 1024, Adam optimizer with learning rate of $6 \times 10^{-4}$, betas 0.9 - 0.995, and eps of 1e-9 [USE LATEX NOTATION], no dropout, and absolute gradient clipping of 0.1. The authors write that the hyperparameters were found via sweep. The questions were fed to the models as sequences of characters and training was stopped at 500k batches.\\
+We trained the models according to the hyperparameters set in the paper: a batch size of 1024, Adam optimizer with learning rate of $6 \times 10^{-4}$,  $\beta_{1} = 0.9$, $\beta_{2} = 0.995$, and $\epsilon = 10^{-9}$, no dropout, and absolute gradient clipping of 0.1. The authors write that the hyperparameters were found via sweep. The questions were fed to the models as sequences of characters and training was stopped at 500,000 batches.\\
 
-The Transformer was configured with an embedding size of $d_{model} = 512$, with h = 8 attentional heads. Key and value sizes were dk = dv = dmodel/h = 64. Each model layer has an intermediate representation with dimension dff = 2048. The "Simple LSTM" used a hidden size of 2048. The "Attentional LSTM” used an encoder of 512 hidden units and decoding LSTM with 2048 hidden units. The LSTMs were also fed zero input 15 times before outputting an answer, to allow for additional computational steps. \\
+The Transformer was configured with an embedding size of $d_{model} = 512$, with $h = 8$ attentional heads. Key and value sizes were $d_{k} = d_{v} = d_{model}/h = 64$. Each model layer has an intermediate representation with dimension $d_{ff} = 2048$. The "Simple LSTM" used a hidden size of 2048. The "Attentional LSTM” used an encoder of 512 hidden units and decoding LSTM with 2048 hidden units. The LSTMs were also fed zero input 15 times before outputting an answer, to allow for additional computational steps. \\
 
 Specific care in our reproduction was put into deterministically conducting training and benchmarking. We used fixed seeds for shuffling data, Numpy, and PyTorch. PyTorch and cudnn were set to deterministic mode. We tested and confirmed that running the training code multiple times on the same machine results in identical learning trajectories. \\
 
-We include two ablation studies: one with a batch size of 128 and another with a learning rate of 6e-6. \\
+We include two ablation studies: one with a batch size of 128 and another with a learning rate of $6 \times 10^{-6}$. \\
 
-Our open-source repository\supercite{hs-math-nlp} includes the training and benchmarking code. The 112 million datapoint, 7.8GB dataset is downloaded from the public site provided by by the authors\supercite{dataset}. Instructions for installation and running both training and benchmarking are in the readme. Training logs are viewable with TensorBoard\supercite{tensorboard}. Checkpoint model files are available in the repository's releases section, including each of the 4 completed epochs, the final 500k batch version, and our ablation study. \\
+Our open-source repository\supercite{hs-math-nlp} includes the training and benchmarking code. Instructions for installation and running both training and benchmarking are in the readme. Training logs are viewable with TensorBoard\supercite{tensorboard}. Checkpoint model files are available in the repository's releases section, including each of the 4 completed epochs, the final 500k batch version, and our ablation study. \\
 
 \subsection{System and Cost} \\
 
@@ -150,8 +171,24 @@ The results for both the attentional and regular LSTM showed ... This puts them 
 \label{fig:test}
 \end{figure}
 
+% Modular Figure: Have models on X axis, modules on Y axis. Modules ordered by transformer performance (higher on top / lower on bottom) 
+
+\begin{figure}[h]
+\centering
+\begin{tabular}{SSSSSSSS} 
+    {\textbf{Module}} & {\textbf{Transformer}} & { \textbf{Attentional LSTM }} & {  \textbf{LSTM}} \\ \midrule
+    \textbf{numbers}  & \cellcolor{blue!25} 3.442 | 3.469   & 3.442 | 3.469 & 3.442 | 3.469    \\ \midrule
+    \textbf{numbers}  & 3.442 | 3.469   & 3.442 | \cellcolor{red!25}3.469 & 3.442 | 3.469   \\ \midrule
+    \textbf{arithmetic}  & 3.442 | 3.469   & 3.442 | 3.469 & 3.442 |\cellcolor{green!25} 3.469    \\ \bottomrule
+\end{tabular}
+\caption{Table of Per Module Performance. Our model performance is shown as the left number and the original papers performance is shown as the right number}
+\end{figure}
+
 
 \section{Analysis and Discussion}
 
 
 \section{Conclusion}
+
+
+
