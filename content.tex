@@ -15,9 +15,11 @@
 %           Deep learning has revolutionized a lot of fields (specifically seq to seq) 
 %           Mathematical Reasoning is ripe for the same type of revolution 
 %               One sentence explanation of mathematical reasoning 
-Deep learning, and more recently the advent of sequence to sequence models has raised the bar on benchmarks in a wide range of areas where humans excel. Some of these include visual reasoning \supercite{voulodimos2018deep}, interpreting / writing text \supercite{radford2019language}, and playing games like Chess or Go \supercite{silver2017mastering}. \\ 
+Deep learning, and more recently the advent of sequence to sequence models, has raised the bar on benchmarks in a wide range of areas where humans excel. Some of these include visual reasoning \supercite{voulodimos2018deep}, interpreting / writing text \supercite{radford2019language}, and playing games like Chess or Go \supercite{silver2017mastering}. However, mathematical reasoning is still an area where humans  outperform neural models. \\ 
 
-However, a separate type of reasoning--mathematical reasoning--is still an area where humans excel and outperform neural models. This type of reasoning involves using  wide array of cognitive skills and learned generalization ability to manipulate symbols and formal systems via logical rules. If the same techniques that were successful on other types of reasoning could be applied to mathematical reasoning researchers might learn a lot about how this type of reasoning works and begin to drastically improve the performance computers have on problems that require this set of skills. \\ 
+Mathematical reasoning involves a wide array of cognitive skills and learned generalization ability to manipulate symbols and formal systems via logical rules. If the same progress that has happened in other domains occurs in mathematical reasoning then researchers' models may soon be able to solve much more interesting and complex mathematics problems. This would be significant in itself but it also may update our approaches to machine reasoning outside of mathematics. \\ 
+
+% If the same techniques that were successful on other types of reasoning could be applied to mathematical reasoning researchers might learn a lot about how this type of reasoning works and begin to drastically improve the performance computers have on problems that require this set of skills.
 
 \begin{figure}[hbt!]
 \includegraphics[width=12cm]{images/math_examples_bunch_reduced.PNG}
@@ -64,27 +66,33 @@ More related work has emerged after the publication of Saxton et al.\supercite{D
 In order to validate the original authors’ results, we attempted to replicate the settings of the described models and test their performance on the interpolate and extrapolate mathematics datatsets. The models chosen were the vanilla Transformer\supercite{vaswani2017attention}, simple LSTM, an attentional LSTM. We omitted the relational memory core and non-bidirectional LSTM encoder models because their results seemed inline with the other models and they were not included in the original paper’s benchmark figures 4 and 5. The authors did not publish the training code, but the model architecture and training process was well-described. The authors were responsive to our questions over email for further details. In this section, we describe our implementation and clarify our decisions.
 
 \subsection{Dataset \\}
-The original authors published both an algorithm for generating math problems and a synthetic math problem dataset for benchmarking. The 112 million datapoint, 7.8GB dataset was downloaded from the public site provided by by the authors\supercite{dataset}. The dataset is organized into 7 major areas and their subcategories, leading to 56 modules of math problems each with 2 million question-answer pairs. Each math problem and solution has a max character length of 160 and 30, respectively, and uses plain-text SymPy\supercite{sympy} notation.
-
-Interpolate and Extrapolate sets
+The original authors published both an algorithm for generating math problems and a synthetic math problem dataset for benchmarking. The 112 million datapoint, 7.8GB dataset was downloaded from the public site provided by by the authors\supercite{dataset}. The dataset is organized into 7 major areas with subcategories, leading to a total of 56 modules of math problems. The modules are stored as a plain-text files, containing 2 million question-answer pairs each. The math problems and solutions have a max character length of 160 and 30, respectively, and use SymPy\supercite{sympy} notation.
 
 \begin{figure}[h]
 \begin{verse}{}
 \textbf{Algebra}: Solve 885*i + 5006 - 14741 = 0 for i.  \\
 \textbf{Answer}: 11 \\
-\textbf{Arithmetic}: Calculate 101 - 594/(-810)*-139. \\
-\textbf{Answer}: -14/15 \\
-\textbf{Calculus}: Find the second derivative of 10490087*j*z**2 - 4460*j - 179*z wrt z.\\
-\textbf{Answer}: 20980174*j \\
-\textbf{Comparison}: Let z(k) = -644*k**2 - 420*k - 13. Let t be z(-3). Which is smaller: -4547 or t?\\
-\textbf{Answer}: t\\
-\textbf{Measurement}: How many minutes are there between 10:25 AM and 10:13 PM?\\
-\textbf{Answer}: 708\\
+\setstretch{1.3}{\textbf{Arithmetic}: Calculate 101 - 594/(-810)*-139. }\\
+\setstretch{1.0}{\textbf{Answer}: -14/15} \\
+\setstretch{1.3}{\textbf{Calculus}: Find the second derivative of 10490087*j*z**2 - 4460*j - 179*z wrt z.}\\
+\setstretch{1.0}{\textbf{Answer}: 20980174*j} \\
+\setstretch{1.3}{\textbf{Comparison}: What is the nearest to -4/31 in -0.3, -33, -2/67?}\\
+\setstretch{1.0}{\textbf{Answer}: -2/67}\\
+\setstretch{1.3}{\textbf{Measurement}: What is 240 minutes before 1:21 PM?}\\
+\setstretch{1.0}{\textbf{Answer}: 9:21 AM}\\
+\setstretch{1.3}{\textbf{Numbers}: Let d = -2178 - -2259. Is d a multiple of 34?} \\
+\setstretch{1.0}{\textbf{Answer}: False}\\
+\setstretch{1.3}{\textbf{Polynomials}: Let h(t) = 2*t. Let w(r) = -126791*r + 2. Calculate h(w(p))} \\
+\setstretch{1.0}{\textbf{Answer}: -253582*p + 4}\\
+\setstretch{1.3}{\textbf{Probability}: Two letters picked without replacement from xxxz. Give prob of sequence zx.}\\
+\setstretch{1.0}{\textbf{Answer}: 1/4}\\
+
 
 
 \end{verse}
-\caption{Examples problems from multiple modules in the original papers dataset}
+\caption{Example problems from multiple modules in the original papers dataset}
 \end{figure}
+ 
  
 \subsection{Implementation Details} \\
 
